@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="좋아하는 계절을 선택하는 HTML 설문" />
+    <title>계절 설문</title>
+  </head>
+  <body>
+    <header>
+      <h1>계절에 대한 설문조사</h1>
+      <nav>
+        <ul>
+          <li><a href="#form">설문 참여</a></li>
+          <li><a href="#gallery">계절 갤러리</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section id="form">
+        <h2>1. 기본 정보와 계절 취향</h2>
+        <form action="/submit" method="post">
+          <fieldset>
+            <legend>개인 정보</legend>
+            <label for="name">이름</label><br />
+            <input type="text" id="name" name="name" required /><br /><br />
+
+            <label for="email">이메일</label><br />
+            <input type="email" id="email" name="email" required />
+          </fieldset>
+          <br />
+
+          <fieldset>
+            <legend>선호 계절</legend>
+            <p>가장 좋아하는 계절은?</p>
+            <ul style="list-style: none; padding-left: 0">
+              <li>
+                <label
+                  ><input type="radio" name="season" value="봄" required />
+                  봄</label
+                >
+              </li>
+              <li>
+                <label
+                  ><input type="radio" name="season" value="여름" /> 여름</label
+                >
+              </li>
+              <li>
+                <label
+                  ><input type="radio" name="season" value="가을" /> 가을</label
+                >
+              </li>
+              <li>
+                <label
+                  ><input type="radio" name="season" value="겨울" /> 겨울</label
+                >
+              </li>
+            </ul>
+
+            <label for="mood">이 계절에 어울리는 기분은?</label><br />
+            <select id="mood" name="mood">
+              <option value="기분 좋음">기분 좋음</option>
+              <option value="활동적임">활동적임</option>
+              <option value="차분함">차분함</option>
+              <option value="쓸쓸함">쓸쓸함</option></select
+            ><br /><br />
+
+            <label for="reason">선택한 이유나 하고 싶은 말 (옵션)</label><br />
+            <textarea
+              id="reason"
+              name="reason"
+              rows="3"
+              placeholder="자유롭게 적어주세요"
+            ></textarea>
+          </fieldset>
+
+          <br />
+          <input type="submit" value="제출하기" />
+        </form>
+      </section>
+
+      <section id="gallery">
+        <h2>2. 계절별 풍경 사진 갤러리</h2>
+
+        <details>
+          <summary
+            style="
+              cursor: pointer;
+              font-weight: bold;
+              font-size: 1.1em;
+              margin-bottom: 10px;
+            "
+          >
+            갤러리 열기 / 닫기
+          </summary>
+          <ul
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 20px;
+              list-style: none;
+              padding: 0;
+              margin-top: 10px;
+            "
+          >
+            <li>
+              <figure style="margin: 0; text-align: center; width: 200px">
+                <img
+                  src="images/spring.jpg"
+                  alt="spring"
+                  style="width: 100%; height: auto; border-radius: 8px"
+                />
+                <figcaption
+                  style="margin-top: 6px; font-size: 0.9em; color: #555"
+                >
+                  봄
+                </figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure style="margin: 0; text-align: center; width: 200px">
+                <img
+                  src="images/summer.jpg"
+                  alt="summer"
+                  style="width: 100%; height: auto; border-radius: 8px"
+                />
+                <figcaption
+                  style="margin-top: 6px; font-size: 0.9em; color: #555"
+                >
+                  여름
+                </figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure style="margin: 0; text-align: center; width: 200px">
+                <img
+                  src="images/autumn.jpg"
+                  alt="autumn"
+                  style="width: 100%; height: auto; border-radius: 8px"
+                />
+                <figcaption
+                  style="margin-top: 6px; font-size: 0.9em; color: #555"
+                >
+                  가을
+                </figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure style="margin: 0; text-align: center; width: 200px">
+                <img
+                  src="images/winter.jpg"
+                  alt="winter"
+                  style="width: 100%; height: auto; border-radius: 8px"
+                />
+                <figcaption
+                  style="margin-top: 6px; font-size: 0.9em; color: #555"
+                >
+                  겨울
+                </figcaption>
+              </figure>
+            </li>
+          </ul>
+        </details>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 계절 설문</p>
+    </footer>
+  </body>
+</html>

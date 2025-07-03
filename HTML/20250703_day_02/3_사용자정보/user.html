@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사용자 정보 입력받고 출력하기</title>
+    <link rel="stylesheet" href="user.css" />
+  </head>
+  <body>
+    <div class="card">
+      <div class="info" id="name"></div>
+      <div class="info" id="hobby"></div>
+      <div class="info" id="song"></div>
+    </div>
+
+    <script>
+      const nameElement = document.querySelector("#name");
+      let name = prompt("이름을 입력하세요:");
+      nameElement.textContent = `이름: ${name}`;
+
+      const hobbyElement = document.querySelector("#hobby");
+      let hobby = prompt("취미를 입력하세요:");
+      hobbyElement.textContent = `취미: ${hobby}`;
+
+      const songElement = document.querySelector("#song");
+      let song = prompt("좋아하는 노래를 입력하세요:");
+      songElement.textContent = `좋아하는 노래: ${song}`;
+    </script>
+  </body>
+</html>

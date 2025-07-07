@@ -4,11 +4,14 @@
 
 ```text
 project-01/
-├── main.html           # 메인 페이지
-├── main.css            # 커스텀 스타일시트
-├── product_data.json   # 제품 더미 데이터
-├── images/
+├── main/               # 메인 기능 관련 폴더
+│   ├── main.html       # 메인 페이지
+│   ├── main.css        # 메인 전용 스타일시트
+|   |── images/
 │   └── no_image.png    # 이미지 오류 시 대체 이미지
+├── signup/             # 회원가입 관련 폴더
+│   ├── signup.html     # 회원가입 페이지
+│   ├── signup.css      # 회원가입 전용 스타일시트
 └── README.md           # 프로젝트 설명 파일
 ```
 

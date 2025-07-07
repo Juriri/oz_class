@@ -10,23 +10,35 @@
     />
     <link href="main.css" rel="stylesheet" />
   </head>
+
   <body>
     <div class="container my-5">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <div
-          class="text-start text-muted"
+          class="text-muted"
           id="current_time"
           style="font-size: 0.9rem"
         ></div>
-        <button id="dark_mode_toggle" class="btn btn-sm btn-outline-dark">
-          Dark Mode
+        <button id="signup_btn" class="btn btn-sm btn-outline-primary">
+          회원가입
         </button>
       </div>
-
+      <button id="dark_mode_toggle" class="btn btn-sm btn-outline-dark">
+        Dark Mode
+      </button>
       <h2 class="text-center mb-4">신규 등록 상품</h2>
 
       <form class="row g-3 mb-4">
-        <div class="col-md-3">
+        <div class="col-md-2">
+          <select class="form-select" id="gender_select" name="gender">
+            <option value="">전체 선택</option>
+            <option value="남성">남성</option>
+            <option value="여성">여성</option>
+            <option value="유니섹스">유니섹스</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
           <select class="form-select" id="category_select" name="category">
             <option value="">전체 카테고리</option>
             <option value="상의">상의</option>
@@ -44,8 +56,8 @@
             placeholder="제품명을 입력해주세요"
           />
         </div>
-        <div class="col-md-3 d-grid">
-          <button type="submit" class="btn btn-primary" id="search_button">
+        <div class="col-md-1 d-grid">
+          <button type="submit" class="btn btn-primary" id="search_btn">
             조회
           </button>
         </div>
@@ -111,13 +123,15 @@
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>
-              <div class="card h-100 shadow-sm">
+              <div class="card shadow-sm rounded">
                 <img src="${image_src}" onerror="this.onerror=null; this.src='./images/no_image.png';" class="card-img-top" alt="${item.product}">
-                <div class="card-body d-flex flex-column p-2">
-                  <p class="card-title fw-semibold small mb-1">${item.product}</p>
-                  <p class="card-text text-muted small mb-1">${item.category}</p>
-                  <p class="card-text text-muted small mb-1">${item.brand}</p>
-                  <p class="fw-bold text-primary small">${item.price}원</p>
+                <div class="card-body px-2">
+                  <p class="card-brand">${item.brand}</p>
+                  <div class="d-flex gender-category-row">
+                    <span class="card-gender">${item.gender}</span>
+                    <span class="card-category">${item.category}</span>
+                  </div>
+                  <p class="card-price">${item.price}원</p>
                 </div>
               </div>
             </td>

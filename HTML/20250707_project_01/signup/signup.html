@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="signup.css" rel="stylesheet" />
+  </head>
+
+  <body class="bg-light">
+    <div class="container mt-5">
+      <div class="d-flex justify-content-end mb-3">
+        <button id="dark_mode_toggle" class="btn btn-sm btn-outline-dark">
+          Dark Mode
+        </button>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm rounded">
+            <div class="card-body">
+              <h3 class="card-title mb-4 text-center">회원가입</h3>
+              <form>
+                <div class="mb-3">
+                  <label for="username" class="form-label">아이디</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="username"
+                      placeholder="아이디 입력"
+                      required
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      id="check_duplicate"
+                    >
+                      중복확인
+                    </button>
+                  </div>
+                  <div id="username_feedback" class="form-text mt-1"></div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">비밀번호</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="비밀번호 입력"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="confirm_password" class="form-label"
+                    >비밀번호 확인</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirm_password"
+                    placeholder="비밀번호 다시 입력"
+                    required
+                  />
+                  <div
+                    id="password_match_feedback"
+                    class="form-text mt-1"
+                  ></div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="name" class="form-label">이름</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder="이름 입력"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="phone" class="form-label">전화번호</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="phone"
+                    placeholder="010-1234-5678"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">성별</label>
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="gender"
+                        id="male"
+                        value="male"
+                        checked
+                      />
+                      <label class="form-check-label" for="male">남성</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="gender"
+                        id="female"
+                        value="female"
+                      />
+                      <label class="form-check-label" for="female">여성</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">이메일</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="example@example.com"
+                    required
+                  />
+                </div>
+
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">
+                    회원가입
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      /* 다크모드 구현 코드 시작 */
+      const toggle_btn = document.getElementById("dark_mode_toggle");
+      toggle_btn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        toggle_btn.textContent = document.body.classList.contains("dark-mode")
+          ? "Light Mode"
+          : "Dark Mode";
+      });
+      /* 다크모드 구현 코드 종료 */
+
+      /* 아이디 중복 확인 코드 시작 */
+      const check_button = document.getElementById("check_duplicate");
+      const username_input = document.getElementById("username");
+      const username_feedback = document.getElementById("username_feedback");
+
+      check_button.addEventListener("click", () => {
+        const username = username_input.value.trim();
+        if (!username) {
+          alert("아이디를 입력해주세요.");
+          username_feedback.textContent = "";
+          return;
+        }
+        username_feedback.textContent = "사용 가능한 아이디입니다.";
+        username_feedback.classList.remove("text-danger");
+        username_feedback.classList.add("text-success");
+      });
+      /* 아이디 중복 확인 코드 종료 */
+
+      /* 이메일, 폰번호, 비밀번호 유효성 검사 */
+      const password_input = document.getElementById("password");
+      const confirm_password_input =
+        document.getElementById("confirm_password");
+      const password_feedback = document.getElementById(
+        "password_match_feedback"
+      );
+      const email_input = document.getElementById("email");
+      const phone_input = document.getElementById("phone");
+      const signup_form = document.querySelector("form");
+
+      function validate_username() {
+        const regex = /^[a-zA-Z0-9]{4,12}$/;
+        const username = username_input.value.trim();
+        if (!regex.test(username)) {
+          username_feedback.textContent =
+            "아이디는 영문자/숫자 조합 4~12자여야 합니다.";
+          username_feedback.classList.remove("text-success");
+          username_feedback.classList.add("text-danger");
+          return false;
+        }
+        username_feedback.textContent = "사용 가능한 아이디입니다.";
+        username_feedback.classList.remove("text-danger");
+        username_feedback.classList.add("text-success");
+        return true;
+      }
+
+      function validate_password() {
+        const password = password_input.value;
+        const confirm_password = confirm_password_input.value;
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+        if (!regex.test(password)) {
+          password_feedback.textContent =
+            "비밀번호는 영문자, 숫자, 특수문자를 포함해 8자 이상이어야 합니다.";
+          password_feedback.classList.remove("text-success");
+          password_feedback.classList.add("text-danger");
+          return false;
+        }
+        if (password !== confirm_password) {
+          password_feedback.textContent = "비밀번호가 일치하지 않습니다.";
+          password_feedback.classList.remove("text-success");
+          password_feedback.classList.add("text-danger");
+          return false;
+        }
+        password_feedback.textContent = "비밀번호가 일치합니다.";
+        password_feedback.classList.remove("text-danger");
+        password_feedback.classList.add("text-success");
+        return true;
+      }
+
+      function validate_email() {
+        const email = email_input.value.trim();
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(email)) {
+          alert("유효한 이메일 주소를 입력해주세요.");
+          return false;
+        }
+        return true;
+      }
+
+      /* 실시간 / blur 이벤트 연결 (아이디, 비밀번호 실시간 검증) */
+      username_input.addEventListener("blur", validate_username);
+      password_input.addEventListener("blur", validate_password);
+      confirm_password_input.addEventListener("blur", validate_password);
+
+      /* 폰 번호 자동 하이픈 */
+      phone_input.addEventListener("input", (e) => {
+        let number = e.target.value.replace(/[^0-9]/g, "");
+        if (number.length < 4) {
+          e.target.value = number;
+        } else if (number.length < 8) {
+          e.target.value = number.slice(0, 3) + "-" + number.slice(3);
+        } else {
+          e.target.value =
+            number.slice(0, 3) +
+            "-" +
+            number.slice(3, 7) +
+            "-" +
+            number.slice(7, 11);
+        }
+      });
+
+      /* 최종 제출 시 아이디, 비밀번호, 이메일 검증 */
+      signup_form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!validate_username() || !validate_password() || !validate_email()) {
+          return;
+        }
+        alert("가입을 환영합니다!");
+        window.location.href = "../main/main.html";
+      });
+    </script>
+  </body>
+</html>

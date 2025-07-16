@@ -1,5 +1,3 @@
-
-# Model -> Table 생성
 # 게시글 - board
 # 유저 - user
 

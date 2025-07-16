@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask_smorest import Blueprint
 from flask.views import MethodView
 from .db import db
-from orm_models import User
+from models import User
 
 user_blp = Blueprint("Users", "users", description="Operations on users", url_prefix='/user')
 

@@ -5,7 +5,7 @@ from flask_cors import CORS
 from routes.db import db
 from routes.user import user_blp
 from routes.board import board_blp
-from orm_models import User, Board
+from models import User, Board
 
 app = Flask(__name__)
 CORS(app)  # CORS 설정
@@ -23,10 +23,17 @@ api = Api(app)
 api.register_blueprint(user_blp)
 api.register_blueprint(board_blp)
 
-# HTML 라우트 예시 (선택)
 @app.route("/")
 def home():
-    return render_template("users.html")  # templates/users.html 가 있어야 함
+    return render_template("home.html")     # 메인 페이지
+
+@app.route("/users")
+def user_page():
+    return render_template("users.html")    # 사용자 관리
+
+@app.route("/boards")
+def board_page():
+    return render_template("boards.html")   # 게시판 관리
 
 # 앱 실행
 if __name__ == "__main__":

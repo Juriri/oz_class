@@ -2,11 +2,10 @@ from flask import request, jsonify
 from flask_smorest import Blueprint
 from flask.views import MethodView
 from .db import db
-from orm_models import Board
+from models import Board
 
 board_blp = Blueprint('Boards', 'boards', description='operations on boards', url_prefix='/board')
 
-# API List
 # /board
 # 전체 게시글을 불러오기 (GET)
 # 게시글 작성 (POST)

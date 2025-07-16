@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사용자 관리</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen font-sans">
+    <main class="container mx-auto p-6">
+      <h1 class="text-3xl font-bold mb-6 text-center">사용자 관리</h1>
+
+      <!-- 사용자 생성 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-semibold mb-4">사용자 생성</h2>
+        <form id="createUserForm" class="grid gap-4 sm:grid-cols-2">
+          <input
+            type="text"
+            id="name"
+            placeholder="사용자 이름"
+            required
+            class="input-field"
+          />
+          <input
+            type="text"
+            id="email"
+            placeholder="이메일"
+            required
+            class="input-field"
+          />
+          <button
+            type="submit"
+            class="btn-primary sm:col-span-2 justify-self-end"
+          >
+            생성
+          </button>
+        </form>
+      </section>
+
+      <!-- 사용자 목록 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold">전체 사용자</h2>
+          <button onclick="getUsers()" class="btn-secondary">새로고침</button>
+        </div>
+        <div id="users" class="overflow-x-auto"></div>
+      </section>
+
+      <!-- 사용자 수정 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-semibold mb-4">사용자 수정</h2>
+        <form id="updateUserForm" class="grid gap-4 sm:grid-cols-3">
+          <input
+            type="number"
+            id="updateUserId"
+            placeholder="사용자 ID"
+            required
+            class="input-field"
+          />
+          <input
+            type="text"
+            id="updateUsername"
+            placeholder="새 이름"
+            class="input-field"
+          />
+          <input
+            type="text"
+            id="updateEmail"
+            placeholder="새 이메일"
+            class="input-field sm:col-span-2"
+          />
+          <button
+            type="submit"
+            class="btn-primary sm:col-span-3 justify-self-end"
+          >
+            수정
+          </button>
+        </form>
+      </section>
+
+      <!-- 사용자 삭제 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">사용자 삭제</h2>
+        <form id="deleteUserForm" class="flex gap-4 flex-wrap">
+          <input
+            type="number"
+            id="deleteUserId"
+            placeholder="사용자 ID"
+            required
+            class="input-field"
+          />
+          <button type="submit" class="btn-danger">삭제</button>
+        </form>
+      </section>
+    </main>
+
+    <style>
+      /* Tailwind CSS는 @apply를 사용하려면 PostCSS 환경이 필요하므로,
+         직접 클래스 속성으로 변환하여 아래에 적용 */
+
+      /* 공통 입력 필드 스타일 */
+      .input-field {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #d1d5db; /* Tailwind border color */
+        border-radius: 0.5rem;
+        outline: none;
+      }
+      .input-field:focus {
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* focus:ring-2 효과 */
+      }
+
+      /* 주요 버튼 스타일 */
+      .btn-primary {
+        background-color: #2563eb; /* bg-blue-600 */
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+      }
+      .btn-primary:hover {
+        background-color: #1d4ed8; /* hover:bg-blue-700 */
+      }
+
+      /* 보조 버튼 스타일 */
+      .btn-secondary {
+        background-color: #e5e7eb; /* bg-gray-200 */
+        color: #374151; /* text-gray-700 */
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+      }
+      .btn-secondary:hover {
+        background-color: #d1d5db; /* hover:bg-gray-300 */
+      }
+
+      /* 삭제 버튼 스타일 */
+      .btn-danger {
+        background-color: #dc2626; /* bg-red-600 */
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+      }
+      .btn-danger:hover {
+        background-color: #b91c1c; /* hover:bg-red-700 */
+      }
+    </style>
+
+    <script>
+      // 사용자 생성
+      document
+        .getElementById("createUserForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+
+          fetch("/user", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              getUsers(); // 사용자 목록 다시 불러오기
+            });
+        });
+
+      // 사용자 조회
+      function getUsers() {
+        fetch("/user/")
+          .then((response) => response.json())
+          .then((data) => {
+            const usersDiv = document.getElementById("users");
+            if (!data.length) {
+              usersDiv.innerHTML =
+                "<p class='text-gray-500'>등록된 사용자가 없습니다.</p>";
+              return;
+            }
+            const rows = data
+              .map(
+                (user) => `
+                <tr class="border-b">
+                  <td class="p-2 text-center">${user.id}</td>
+                  <td class="p-2">${user.name}</td>
+                  <td class="p-2">${user.email}</td>
+                </tr>`
+              )
+              .join("");
+            usersDiv.innerHTML = `
+              <table class="min-w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-100 border-b">
+                    <th class="p-2">ID</th>
+                    <th class="p-2">이름</th>
+                    <th class="p-2">이메일</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>`;
+          });
+      }
+
+      // 사용자 수정
+      document
+        .getElementById("updateUserForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const userId = document.getElementById("updateUserId").value;
+          const name = document.getElementById("updateUsername").value;
+          const email = document.getElementById("updateEmail").value;
+
+          fetch("/user/" + userId, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              getUsers(); // 사용자 목록 다시 불러오기
+            });
+        });
+
+      // 사용자 삭제
+      document
+        .getElementById("deleteUserForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const userId = document.getElementById("deleteUserId").value;
+
+          fetch("/user/" + userId, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              getUsers(); // 사용자 목록 다시 불러오기
+            });
+        });
+    </script>
+  </body>
+</html>

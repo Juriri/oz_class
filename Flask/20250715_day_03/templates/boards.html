@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시판 관리</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen font-sans">
+    <main class="container mx-auto p-6">
+      <h1 class="text-3xl font-bold mb-6 text-center">게시판 관리</h1>
+
+      <!-- 게시글 생성 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-semibold mb-4">게시글 작성</h2>
+        <form id="createBoardForm" class="grid gap-4 sm:grid-cols-2">
+          <input
+            type="text"
+            id="boardTitle"
+            placeholder="제목"
+            required
+            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2"
+          />
+          <input
+            type="number"
+            id="userId"
+            placeholder="사용자 ID"
+            required
+            class="input-field"
+          />
+          <textarea
+            id="boardContent"
+            placeholder="내용"
+            required
+            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 sm:col-span-2 h-24"
+          ></textarea>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition sm:col-span-2 justify-self-end"
+          >
+            작성
+          </button>
+        </form>
+      </section>
+
+      <!-- 게시글 목록 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold">전체 게시글</h2>
+          <button
+            id="refreshBtn"
+            class="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-300 transition"
+          >
+            새로고침
+          </button>
+        </div>
+        <div id="boards" class="overflow-x-auto"></div>
+      </section>
+
+      <!-- 게시글 수정 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-semibold mb-4">게시글 수정</h2>
+        <form id="updateBoardForm" class="grid gap-4 sm:grid-cols-3">
+          <input
+            type="number"
+            id="updateBoardId"
+            placeholder="게시글 ID"
+            required
+            class="input-field"
+          />
+          <input
+            type="text"
+            id="updateBoardTitle"
+            placeholder="새 제목"
+            class="input-field"
+          />
+          <textarea
+            id="updateBoardContent"
+            placeholder="새 내용"
+            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 h-24 sm:col-span-3"
+          ></textarea>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition sm:col-span-3 justify-self-end"
+          >
+            수정
+          </button>
+        </form>
+      </section>
+
+      <!-- 게시글 삭제 섹션 -->
+      <section class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">게시글 삭제</h2>
+        <form id="deleteBoardForm" class="flex gap-4 flex-wrap">
+          <input
+            type="number"
+            id="deleteBoardId"
+            placeholder="게시글 ID"
+            required
+            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2"
+          />
+          <button
+            type="submit"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+          >
+            삭제
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <!-- 공통 스타일 정의 제거됨: Tailwind 유틸리티 클래스를 직접 사용하세요 -->
+
+    <!-- JavaScript 기능 정의 -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const boardsDiv = document.getElementById("boards");
+
+        // JSON 요청 유틸 함수
+        const fetchJSON = async (url, options = {}) => {
+          const res = await fetch(url, options);
+          if (!res.ok) throw new Error(`요청 실패: ${res.status}`);
+          return res.json();
+        };
+
+        // 게시글 테이블 렌더링 함수
+        const renderBoards = (boards) => {
+          if (!boards.length) {
+            boardsDiv.innerHTML =
+              "<p class='text-gray-500'>게시글이 없습니다.</p>";
+            return;
+          }
+          const rows = boards
+            .map(
+              (b) => `
+            <tr class="border-b">
+              <td class="p-2 text-center">${b.id}</td>
+              <td class="p-2">${b.title}</td>
+              <td class="p-2">${b.content}</td>
+              <td class="p-2 text-center">${b.user_id}</td>
+            </tr>`
+            )
+            .join("");
+          boardsDiv.innerHTML = `
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="bg-gray-100 border-b">
+                  <th class="p-2">ID</th>
+                  <th class="p-2">제목</th>
+                  <th class="p-2">내용</th>
+                  <th class="p-2">사용자 ID</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>`;
+        };
+
+        // 초기 게시글 불러오기
+        const getBoards = async () => {
+          try {
+            const data = await fetchJSON("/board");
+            renderBoards(data);
+          } catch (err) {
+            console.error(err);
+            boardsDiv.innerHTML = `<p class='text-red-500'>게시글을 불러오는 중 오류 발생</p>`;
+          }
+        };
+        getBoards();
+
+        // 새로고침 버튼 클릭 이벤트
+        document
+          .getElementById("refreshBtn")
+          .addEventListener("click", getBoards);
+
+        // 게시글 작성 이벤트
+        document
+          .getElementById("createBoardForm")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const title = boardTitle.value;
+            const content = boardContent.value;
+            const userId = userId.value;
+            try {
+              await fetchJSON("/board", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content, user_id: userId }),
+              });
+              e.target.reset();
+              getBoards();
+            } catch (err) {
+              alert(err.message);
+            }
+          });
+
+        // 게시글 수정 이벤트
+        document
+          .getElementById("updateBoardForm")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const id = updateBoardId.value;
+            const title = updateBoardTitle.value;
+            const content = updateBoardContent.value;
+            try {
+              await fetchJSON(`/board/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content }),
+              });
+              e.target.reset();
+              getBoards();
+            } catch (err) {
+              alert(err.message);
+            }
+          });
+
+        // 게시글 삭제 이벤트
+        document
+          .getElementById("deleteBoardForm")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const id = deleteBoardId.value;
+            try {
+              await fetchJSON(`/board/${id}`, { method: "DELETE" });
+              e.target.reset();
+              getBoards();
+            } catch (err) {
+              alert(err.message);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

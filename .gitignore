@@ -3,3 +3,8 @@
 
 # Node
 node_modules/
+
+
+# Virtual Environment
+venv/
+.env

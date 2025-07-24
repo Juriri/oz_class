@@ -55,13 +55,19 @@ ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        #'DIRS': [BASE_DIR / 'templates'],  # Jinja 템플릿 위치
+         'DIRS': [
+                    os.path.join(BASE_DIR, 'bookmark', 'templates'),
+                    os.path.join(BASE_DIR, 'todolist', 'templates'),
+                ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'config.jinja2.environment',
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [],
-        #'APP_DIRS': True,
-        #'DIRS': [
-          #          os.path.join(BASE_DIR, 'bookmark', 'templates'),
-         #           os.path.join(BASE_DIR, 'todolist', 'templates'),
-        #        ],
         'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -71,14 +77,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-        },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',  # ➕ Jinja 추가
-        'DIRS': [BASE_DIR / 'jinja_templates'],  # ➕ Jinja 템플릿 경로
-        'APP_DIRS': False,  # 자동탐색 X
-        'OPTIONS': {
-            'environment': 'config.jinja2.environment',  # 아래에서 정의
         },
     },
 ]

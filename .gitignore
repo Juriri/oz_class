@@ -4,7 +4,7 @@
 # Node
 node_modules/
 
-
 # Virtual Environment
 venv/
+.venv/
 .env

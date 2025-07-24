@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'bookmark',
+    'todolist',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,13 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        #'DIRS': [],
+        #'APP_DIRS': True,
+        #'DIRS': [
+          #          os.path.join(BASE_DIR, 'bookmark', 'templates'),
+         #           os.path.join(BASE_DIR, 'todolist', 'templates'),
+        #        ],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,6 +71,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+        },
+    },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',  # ➕ Jinja 추가
+        'DIRS': [BASE_DIR / 'jinja_templates'],  # ➕ Jinja 템플릿 경로
+        'APP_DIRS': False,  # 자동탐색 X
+        'OPTIONS': {
+            'environment': 'config.jinja2.environment',  # 아래에서 정의
         },
     },
 ]
